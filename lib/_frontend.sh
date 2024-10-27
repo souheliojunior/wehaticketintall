@@ -14,7 +14,7 @@ frontend_node_dependencies() {
 
   sleep 2
 
-   - deploy <<EOF
+   deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
   npm install
 EOF
@@ -34,7 +34,7 @@ frontend_node_build() {
 
   sleep 2
 
-   - deploy <<EOF
+   deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
   npm run build
 EOF
@@ -54,7 +54,7 @@ frontend_update() {
 
   sleep 2
 
-   - deploy <<EOF
+ deploy <<EOF
   cd /home/deploy/${empresa_atualizar}
   pm2 stop ${empresa_atualizar}-frontend
   git pull
@@ -87,7 +87,7 @@ frontend_set_env() {
   backend_url=${backend_url%%/*}
   backend_url=https://$backend_url
 
- - deploy << EOF
+ deploy << EOF
   cat <<[-]EOF > /home/deploy/${instancia_add}/frontend/.env
 REACT_APP_BACKEND_URL=${backend_url}
 REACT_APP_HOURS_CLOSE_TICKETS_AUTO = 24
@@ -96,7 +96,7 @@ EOF
 
   sleep 2
 
- - deploy << EOF
+ deploy << EOF
   cat <<[-]EOF > /home/deploy/${instancia_add}/frontend/server.js
 //simple express server to run frontend production build;
 const express = require("express");
@@ -134,7 +134,7 @@ EOF
 
  sleep 2
   
-   - root <<EOF
+   root <<EOF
    pm2 startup
    env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
 EOF
@@ -155,7 +155,7 @@ frontend_nginx_setup() {
 
   frontend_hostname=$(echo "${frontend_url/https:\/\/}")
 
- - root << EOF
+ root << EOF
 
 cat > /etc/nginx/sites-available/${instancia_add}-frontend << 'END'
 server {
